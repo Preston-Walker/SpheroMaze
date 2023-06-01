@@ -25,6 +25,19 @@ params_end.filterByInertia = False
 params_end.minInertiaRatio = 0.01
 params_end.maxInertiaRatio = 1
 end_detector = cv2.SimpleBlobDetector_create(params_end)
+params_sphero = cv2.SimpleBlobDetector_Params()
+params_sphero.minDistBetweenBlobs = 10
+params_sphero.filterByColor = True
+params_sphero.blobColor = 255
+params_sphero.filterByArea = True
+params_sphero.minArea = 500
+params_sphero.maxArea = 6000
+params_sphero.filterByCircularity = False
+params_sphero.filterByConvexity = False
+params_sphero.filterByInertia = False
+params_sphero.minInertiaRatio = 0.01
+params_sphero.maxInertiaRatio = 1
+sphero_detector = cv2.SimpleBlobDetector_create(params_sphero)
 
 class Maze_Solver():
 	def __init__(self, camera):
@@ -36,7 +49,7 @@ class Maze_Solver():
 		img = self.camera.get_image_unfiltered(True)
 
 		GRAY = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
+		#GRAY = cv2.medianBlur(GRAY, 7)
 		circles = cv2.HoughCircles(GRAY, cv2.HOUGH_GRADIENT, 1.5, 75, param1=500, param2=30, minRadius=10, maxRadius=30)
 
 		if circles is None or len(circles)== 0 or circles[0][0][0] == 0 :
@@ -50,18 +63,35 @@ class Maze_Solver():
 			return circles[0][0]
 
 	def getStartPoint(self):
-		c = self.getSpheroCorodinates()
+		#c = self.getSpheroCorodinates()
+		c = self.getColorSphero()
 		return [2*int(c[1]*ROWS/PERSPECTIVE_HEIGHT)+1, 2*int(c[0]*COLS/PERSPECTIVE_WIDTH)+1]
+	
+	# TODO: make the program recognize the ball using color
+	def getColorSphero(self):
+		sphero_img = self.camera.get_image_sphero_filtered(True)
+		keypoints = sphero_detector.detect(sphero_img)
+
+		if len(keypoints)>1:
+			print ('Found multiple sphero')
+		if len(keypoints) == 0:
+			print ('No sphero found, routing to top left corner')
+			return (0,0)
+		# if len(keypoints) == 1:
+		# 	print("sphero found")
+		return keypoints[0].pt
 
 	def findEndMarker(self):
 		endPoint_img = self.camera.get_image_endpoint_filtered(True)
 		keypoints = end_detector.detect(endPoint_img)
 
 		if len(keypoints)>1:
-			print ('Found multiple endpoints')
+			print ('Found multiple endpoint')
 		if len(keypoints) == 0:
-			print ('No Endpoint found, routing to top left corner')
+			print ('No endpoint found, routing to top left corner')
 			return (0,0)
+		if len(keypoints) == 1:
+			print("endpoint found")
 		return keypoints[0].pt
 
 	def getEndPoint(self):
@@ -71,7 +101,8 @@ class Maze_Solver():
 
 	def findMazeMatrix(self):
 		walls_img = np.array(self.camera.get_image_wall_filtered(True))
-		sphero_coordinates = self.getSpheroCorodinates()
+		# sphero_coordinates = self.getSpheroCorodinates()
+		sphero_coordinates = self.getColorSphero()
 
 		maze = np.zeros((2 * ROWS + 1, 2 * COLS + 1))
 		maze[1:ROWS * 2:2, 1:COLS * 2:2] = 1

@@ -94,7 +94,9 @@ class Maze_Controller:
             CheckpointX, CheckpointY = solverToImageCoordinates(remaining_checkpoints[0])
             print("Checkpoint Coordinates: " + str(CheckpointX) + " " + str(CheckpointY))
 
-            coordinates = self.maze_solver.getSpheroCorodinates()
+            #coordinates = self.maze_solver.getSpheroCorodinates()
+            coordinates = self.maze_solver.getColorSphero()
+
             print("Sphero Coordinates:" + str(self.maze_solver.coord_to_dik_num(coordinates)) + str(coordinates))
 
             # Setup up for PID
@@ -107,7 +109,8 @@ class Maze_Controller:
             while self.controller_on:
                 #loop_time = time.time() # Record start time for calculating dt #given up on trying this and commented out dt stuff
                 ### Get Sphero Coordinates ###
-                self.sphero_coordinates = self.maze_solver.getSpheroCorodinates()
+                #self.sphero_coordinates = self.maze_solver.getSpheroCorodinates()
+                self.sphero_coordinates = self.maze_solver.getColorSphero()
                 #print("Sphero Coordinates" + str(self.sphero_coordinates))
 
                 # Check if there is even a Sphero in the maze

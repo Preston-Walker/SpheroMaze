@@ -102,7 +102,8 @@ class Application:
 
             # Maze feed
             if self.sphero_feed:
-                coordinates = self.maze_solver.getSpheroCorodinates()
+                #coordinates = self.maze_solver.getSpheroCorodinates()
+                coordinates = self.maze_solver.getColorSphero()
                 image = self.camera.get_image_unfiltered(True)
                 cv2.circle(image, (int(coordinates[0]), int(coordinates[1])), 35, (255, 255, 255), 3)
                 cv2.imshow("Sphero Position",image)

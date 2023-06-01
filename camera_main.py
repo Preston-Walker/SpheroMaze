@@ -21,7 +21,7 @@ import json
 import os
 
 # Support Macros
-CAMERA_NUMBER = 0  # The camera number indicates which camera is being used; default value is 0.
+CAMERA_NUMBER = 1  # The camera number indicates which camera is being used; default value is 0.
 PARAMETERS_FILE = "parameters.txt"  # Name of the file that stores threshold values
 CORNERS_FILE = "corners.txt"
 CAMERA_SETTINGS_FILE = "camSettings.txt"
@@ -83,6 +83,8 @@ class Maze_Camera():
         self.wallsThreshold = self.Threshold("Walls Threshold")
         # self.cornersThreshold = self.Threshold("Corners Threshold")  # Unneeded
         self.endPointThreshold = self.Threshold("Endpoint Threshold")
+        # Sphero threshold
+        self.spheroThreshold = self.Threshold("Sphero Threshold")
         # print("Test:",self.wallsThreshold.name, self.cornersThreshold.name, self.endPointThreshold.name)
         self.__init_thresholds()  # Set values for thresholds
 
@@ -232,6 +234,7 @@ class Maze_Camera():
         self.__read_values_from_file(f, self.wallsThreshold)
         # self.__read_values_from_file(f, self.cornersThreshold)
         self.__read_values_from_file(f, self.endPointThreshold)
+        self.__read_values_from_file(f, self.spheroThreshold)
 
         f.close()
 
@@ -242,6 +245,7 @@ class Maze_Camera():
         self.__write_values_to_file(f, self.wallsThreshold)
         # self.__write_values_to_file(f, self.cornersThreshold)
         self.__write_values_to_file(f, self.endPointThreshold)
+        self.__write_values_to_file(f, self.spheroThreshold)
         f.close()
 
     # Supporting function that reads values into a threshold class.
@@ -316,6 +320,7 @@ class Maze_Camera():
         HSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         self.__getThreshold(HSV, self.wallsThreshold, "WALLS")
         self.__getThreshold(HSV, self.endPointThreshold, "End Point")
+        self.__getThreshold(HSV, self.spheroThreshold, "Sphero")
 
 
 # --------------------------------- Camera and Filter Images ----------------------------------------------------------#
@@ -397,6 +402,33 @@ class Maze_Camera():
         endPoint_img = cv2.morphologyEx(endPoint_img, cv2.MORPH_CLOSE, kernel)
 
         return endPoint_img
+    
+    def get_image_sphero_filtered(self, transform=False):
+        if self.noCam:
+            img = cv2.imread(NOCAM_IMG,cv2.IMREAD_COLOR)
+
+        elif self.camera_open:
+            # Read and return image from camera
+            ret, img = self.cap.read()
+
+        else:
+            return
+
+        # Apply transformation to image if needed
+        if transform:
+            try:
+                img = self.__crop_image(img)
+            except:
+                print("Maze Camera: Get Image Error: failed to get transformed image")
+
+        # Convert it to HSV and filter it
+        HSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        sphero_img = cv2.inRange(HSV, np.array([self.spheroThreshold.H_MIN, self.spheroThreshold.S_MIN, self.spheroThreshold.V_MIN]),
+                                   np.array([self.spheroThreshold.H_MAX, self.spheroThreshold.S_MAX, self.spheroThreshold.V_MAX]))
+        sphero_img = cv2.morphologyEx(sphero_img, cv2.MORPH_OPEN, kernel)
+        sphero_img = cv2.morphologyEx(sphero_img, cv2.MORPH_CLOSE, kernel)
+
+        return sphero_img
 
 # --------------------------------- Setting and Getting Corners ----------------------------------------------------------#
     # Get corners returns a list of corner coordinates

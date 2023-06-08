@@ -12,7 +12,7 @@ Other details about the maze include:
 ### Setting up the maze
 #### Needed Hardware
 The maze includes the following hardware:
-  * 2 Sphero’s (and their charging stations)
+  * 2 blue Sphero’s (and their charging stations)
   * USB Webcam (attached to crossbar PVC)
   * 5 PVC pieces for the camera mount (2 “T” base pieces, 2 support posts, 1 crossbar)
   * maze board (wooden board with metal posts)
@@ -81,7 +81,7 @@ more details on connecting the Sphero’s to Bluetooth)
 
 7. Next click on the Corners button under the Settings Section.  Click on each of the four corners of the maze on the image in the window that pops up.  The corners can be selected in any order.  Aim for the inside corner of the top of the outer white wall.
 
-8. After selecting the corners, click on the Filters button under the Settings Section.  A screenshot of the walls filter and a window of sliders should appear.  Adjust the filters until only the walls are visible.  Press spacebar to continue to endpoint filters.  Adjust the sliders until only the red endpoint appears.  Press spacebar to exit filters.  
+8. After selecting the corners, click on the Filters button under the Settings Section.  A screenshot of the walls filter and a window of sliders should appear.  Adjust the filters until only the walls are visible.  Press spacebar to continue to endpoint filters.  Adjust the sliders until only the red endpoint appears.  Press spacebar to continue to sphero filters.  Adjust the sliders until only the blue sphero appears.  Press spacebar to exit filters.  
    Note: Different lighting will require different filter values. If you are having difficulty getting the filters right, click on the 
          Camera button to adjust the brightness and exposure of the camera, and then try adjusting the filters again.
 

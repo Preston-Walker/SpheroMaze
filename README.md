@@ -12,7 +12,7 @@ Other details about the maze include:
 ### Setting up the maze
 #### Needed Hardware
 The maze includes the following hardware:
-  * 2 blue Sphero’s (and their charging stations)
+  * 2 blue Spheros (and their charging stations)
   * USB Webcam (attached to crossbar PVC)
   * 5 PVC pieces for the camera mount (2 “T” base pieces, 2 support posts, 1 crossbar)
   * maze board (wooden board with metal posts)
@@ -28,6 +28,8 @@ The maze includes the following hardware:
 2. Set up the camera mount. Connect each support post to a base (it does not matter which one goes where here). Next, connect the crossbar to the supports. Each end of the crossbar should have a color that corresponds to the support that it should connect in to. Once the camera mount is assembled it is recommended to loosely wind the cord to the camera around the crossbar and support closest to the computer (this keeps the cable from dangling in the view of the camera).
 
 3. Place the camera mount over the maze board. The mount’s base pieces and supports should be outside of the maze. Match the colors on the outside of the maze walls to those on the bottom of the support.
+  a. Yellow at the bottom, blue on the left, red on the right.
+  b. Blue tape on top of webcam must face blue side of maze.
 
 4. Use the USB extension cable to connect the webcam to the computer.
 

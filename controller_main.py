@@ -160,10 +160,12 @@ class Maze_Controller:
                 if k == 32:
                     print('Spacebar!')
                     break
-                elif k == 2424832:
+                elif k == 2424832: #left arrow
+                    headingOffset = headingOffset - 45
+                    #heading = heading - 45
+                elif k == 2555904: # right arrow
                     headingOffset = headingOffset + 45
-                elif k == 2555904:
-                    headingOffset = headingOffset + 45
+                    #heading = heading + 45
 
                 # Roll the Sphero in the set heading at the calculated speed
                 if (distance < self.checkpointThreshold):

@@ -21,7 +21,7 @@ import json
 import os
 
 # Support Macros
-CAMERA_NUMBER = 1  # The camera number indicates which camera is being used; default value is 0.
+CAMERA_NUMBER = 0  # The camera number indicates which camera is being used; default value is 0.
 PARAMETERS_FILE = "parameters.txt"  # Name of the file that stores threshold values
 CORNERS_FILE = "corners.txt"
 CAMERA_SETTINGS_FILE = "camSettings.txt"

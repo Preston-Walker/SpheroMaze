@@ -78,6 +78,7 @@ class Maze_Controller:
         while self.controller_on:
             print('starting while')
             try:
+                print("Recalculate")
                 remaining_checkpoints = self.maze_solver.solveMaze()
             except Exception as ex:
                 print(ex)
@@ -131,7 +132,7 @@ class Maze_Controller:
                 while heading < 0:
                     heading += 360
                 while heading > 360:
-                    heading -= - 360
+                    heading -= 360 # -360?
                 # Calculate the distance between Sphero and checkpoint
                 distance = math.sqrt(math.pow(CheckpointY - y, 2) + math.pow(CheckpointX - x, 2))
                 #print("DistanceY:" + str(CheckpointY - y) + "," +  str(distance))
@@ -161,10 +162,14 @@ class Maze_Controller:
                     print('Spacebar!')
                     break
                 elif k == 2424832: #left arrow
-                    headingOffset = headingOffset - 45
+                    #headingOffset = headingOffset - 45
+                    print("left arrow")
+                    sphero.roll(100, 270, 1, False)
                     #heading = heading - 45
                 elif k == 2555904: # right arrow
-                    headingOffset = headingOffset + 45
+                    #headingOffset = headingOffset + 45
+                    print("right arrow")
+                    sphero.roll(100, 90, 1, False)
                     #heading = heading + 45
 
                 # Roll the Sphero in the set heading at the calculated speed
@@ -180,6 +185,11 @@ class Maze_Controller:
                 if time.time() - start_time > 5:
                     timer_overlap = True
                     print('TIMER OVERFLOW')
+                    random.seed()
+                    print("random direction")
+                    direction = random.randint(0,359)
+                    for i in range(3):
+                        sphero.roll(100, direction, 1, False)
                     #print('Loop Time: ', self.dts)
                     break
                 else:
